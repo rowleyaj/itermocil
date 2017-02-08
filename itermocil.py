@@ -268,6 +268,29 @@ class Itermocil(object):
                     qp = pp + q
                     cp = pp + 1 + q
                     i += 1
+
+        # '4_columns' layouts create 4 columns and then however many rows as
+        # needed. If there are odd number of panes then the bottom pane
+        # spans columns. Panes are numbered top to bottom, left to right.
+        elif layout == '4_columns':
+
+            vertical_splits = int(ceil((num_panes / 4.0))) - 1
+            i = 1
+
+            for p in range(0, vertical_splits):
+                pp = (p * 4) + 1
+                cp = pp + 4
+                i += 1
+                self.applescript.append(create_pane(pp, cp, "horizontal"))
+
+            for p in range(0, vertical_splits+1):
+                pp = (p * 4) + 1
+                for q in range(0, 3):
+                    if i >= num_panes:
+                        break
+                    qp = pp + q
+                    cp = pp + 1 + q
+                    i += 1
                     self.applescript.append(create_pane(qp, cp, "vertical"))
 
         # Raise an exception if we don't recognise the layout setting.
